@@ -22,9 +22,9 @@ class MyConsumer(SyncConsumer):
         
         self.send({ 
             'type':'websocket.send',
-            'text':'122',
+            'text':event['text'],
         })
-        
+         
         
     def websocket_disconnect(self ,event):
         print('websocket Disconnected' , event) 

@@ -9,6 +9,22 @@
 <body> 
     
     <p>hello Django Channels </p>
+    <h3>Messages App</h3>
+    <div class="messages">
+            <div class="bot">
+                <div class="recs">
+                    <div id="rec" style="color:blue;">asda</div>
+                </div>
+                <div class="sens">
+                    <div id="sen" style="color:green;">sa</div>
+                </div>
+            </div>
+            
+            <form action="">
+                <input type="text" name="" id="message">
+                <input type="submit" value="Send">
+            </form>
+    </div>
 
 </body>
 </html>
@@ -22,11 +38,13 @@
 
     ws.onopen=function(event){
         console.log('Web Socket Connection is Open'  ,  event)
-        ws.send('HI..! Message from Abu Bakar Waheed //')
+        ws.send('HI..! Message from Abu Bakar Waheed .... ')
     }
 
     ws.onmessage=function(event){
         console.log('Message Recieved From Server',event['data'] , event)
+
+        document.getElementById('rec').innerHTML=`<h2>  ${event['data']}  </h2>`
     }
 
 
