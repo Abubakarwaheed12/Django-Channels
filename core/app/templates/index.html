@@ -6,9 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Django Channels</title>
 </head>
-<body>
+<body> 
     
     <p>hello Django Channels </p>
 
 </body>
 </html>
+
+
+
+<script>
+
+    
+    const ws = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
+
+    ws.onopen=function(event){
+        console.log('Web Socket Connection is Open'  ,  event)
+        ws.send('HI..! Message from Abu Bakar Waheed //')
+    }
+
+    ws.onmessage=function(event){
+        console.log('Message Recieved From Server',event['data'] , event)
+    }
+
+
+    ws.onerror=function(event){
+        console.log('An Error Occured, ' , event)
+    }
+
+    ws.onclose=function(event){
+        console.log('Connection Closed  ' , event)
+    }
+
+</script>
