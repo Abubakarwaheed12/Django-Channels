@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Channels</title>
+</head>
+<body> 
+    
+    <p>hello Django Channels </p>
+    <h3>Messages App</h3>
+    <div class="messages">
+            <div class="bot">
+                <div class="recs">
+                    <p id="rec" style="color:blue;"></p>
+                </div>
+                <div class="sens">
+                    <p id="sen" style="color:green;"></p>
+                </div>
+            </div>
+            
+          
+                <input type="text" name="" id="message" >
+                <input type="submit" value="Send"  id="sub">
+         
+    </div>
+
+</body>
+</html>
+
+{{group_name|json_script:"group_name"}}
+
+<script>
+
+    const groupName=JSON.parse(document.getElementById('group_name').textContent)
+    
+    console.log(groupName)
+    
+    //const ws = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
+
+    const ws = new WebSocket(
+        'ws://'
+        + window.location.host+
+        '/ws/chat/'
+        +groupName
+    );
+
+
+    ws.onopen=function(event){
+        console.log('Web Socket Connection is Open'  ,  event)
+    }
+
+    ws.onmessage=function(event){
+        console.log('Message Recieved From Server', event)
+        mesg=JSON.parse(event.data)
+        console.log('data:', mesg.msg)
+
+        document.getElementById('rec').innerText +=(mesg.msg + '\n')
+    }
+
+
+    ws.onerror=function(event){
+        console.log('An Error Occured, ' , event)
+    }
+
+    ws.onclose=function(event){
+        console.log('Connection Closed  ' , event)
+    }
+
+    document.getElementById('sub').onclick=function(event){
+            msg=document.getElementById('message')
+            msg_text=msg.value
+            console.log(msg_text)
+
+            ws.send(JSON.stringify({
+                'msg':msg_text,
+            }))
+
+            msg.value=''
+
+            //document.getElementById('sen').innerText +=(msg_text + '\n')
+    }
+
+</script>
