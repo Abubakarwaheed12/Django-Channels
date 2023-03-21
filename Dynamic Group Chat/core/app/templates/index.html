@@ -12,9 +12,12 @@
     <h3>Messages App</h3>
     <div class="messages">
             <div class="bot">
+                {% for chat in chats %}
                 <div class="recs">
-                    <p id="rec" style="color:blue;"></p>
+                    <p id="rec" style="color:blue;"> {{chat.content}} </p>
+                    {{chat.timestamp}} 
                 </div>
+                {% endfor %}
                 <div class="sens">
                     <p id="sen" style="color:green;"></p>
                 </div>
