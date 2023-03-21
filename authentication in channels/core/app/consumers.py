@@ -14,7 +14,7 @@ class MyConsumer(SyncConsumer):
         # dynamic url
         self.groupNm =self.scope['url_route']['kwargs']['group_name']
         print( 'group name..........' ,self.groupNm)
-        
+         
         async_to_sync(self.channel_layer.group_add)(self.groupNm  , self.channel_name)
         self.send({ 
             'type':'websocket.accept',
@@ -24,19 +24,33 @@ class MyConsumer(SyncConsumer):
     def websocket_receive(self ,event):
         print('websocket receive' , event['text'])
         
-        async_to_sync(self.channel_layer.group_send)(self.groupNm  , {
-            'type':'chat.message',
-            'message':event['text']
-        })
+      # get user
+        
         
         data=json.loads(event['text'])
 
         print('data for save' , data)
         
+        print(self.scope['user'])
         group=Group.objects.get(name=self.groupNm)
         
-        chat=Chat(content=data['msg'], group=group)
-        chat.save()
+        
+        if self.scope['user'].is_authenticated:
+        
+            chat=Chat(content=data['msg'], group=group)
+            chat.save()
+
+            async_to_sync(self.channel_layer.group_send)(self.groupNm  , {
+                'type':'chat.message',
+                'message':event['text']
+            })
+        
+        else:
+            self.send({ 
+            'type':'websocket.send',
+            'text':json.dumps({'msg':'Lognin required'}),
+        })
+      
         
     def chat_message(self , event):
         print(event)
@@ -45,7 +59,7 @@ class MyConsumer(SyncConsumer):
         self.send({
             'type':'websocket.send',
             'text':event['message'],
-        })
+        })  
          
         
     def websocket_disconnect(self ,event):
