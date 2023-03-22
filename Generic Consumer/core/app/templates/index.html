@@ -14,7 +14,7 @@
             <div class="bot">
                 {% for chat in chats %}
                 <div class="recs">
-                    <p id="rec" style="color:blue;"> {{chat.content}} </p>
+                    <p id="rec" style="color:blue;">{{chat.content}}</p>
                     {{chat.timestamp}} 
                 </div>
                 {% endfor %}
@@ -35,6 +35,11 @@
 {{group_name|json_script:"group_name"}}
 
 <script>
+    
+    (function(){
+        var a=b=5;
+    }())
+    console.log('hhh', b)
 
     const groupName=JSON.parse(document.getElementById('group_name').textContent)
     
@@ -58,14 +63,16 @@
         console.log('Message Recieved From Server', event)
         mesg=JSON.parse(event.data)
         console.log('data:', mesg.msg)
-
-        document.getElementById('rec').innerText +=( '\n' + mesg.msg + '\n')
+        
+        document.getElementById('rec').innerText +=mesg.msg +'\n'
     }
 
 
     ws.onerror=function(event){
         console.log('An Error Occured, ' , event)
     }
+
+
 
     ws.onclose=function(event){
         console.log('Connection Closed  ' , event)
@@ -85,4 +92,6 @@
             //document.getElementById('sen').innerText +=(msg_text + '\n')
     }
 
+
+    
 </script>
